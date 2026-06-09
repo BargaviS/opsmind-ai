@@ -1,0 +1,6 @@
+OpsMind AI is an intelligent document search system.
+It uses RAG (Retrieval Augmented Generation) to answer questions from documents.
+The system supports PDF and TXT file uploads.
+Documents are chunked, embedded, and stored in a vector database.
+Users can ask natural language questions and get AI-powered answers with source attribution.
+The backend is built with FastAPI, ChromaDB, and Gemini AI.
