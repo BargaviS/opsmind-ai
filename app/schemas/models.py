@@ -31,3 +31,20 @@ class HealthResponse(BaseModel):
     status: str
     app: str
     env: str
+
+
+class ChatMessage(BaseModel):
+    role: str
+    content: str
+
+
+class ChatRequest(BaseModel):
+    query: str
+    history: Optional[List[ChatMessage]] = []
+    top_k: Optional[int] = 5
+
+
+class ChatResponse(BaseModel):
+    answer: str
+    sources: List[SearchResult]
+    history: List[ChatMessage]

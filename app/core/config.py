@@ -3,7 +3,7 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    APP_NAME: str = "OpsMind AI"
+    APP_NAME: str = "HR Policy Bot"
     ENV: str = "development"
 
     UPLOAD_DIR: str = "data/uploads"
@@ -12,6 +12,7 @@ class Settings(BaseSettings):
 
     EMBEDDING_MODEL: str = "BAAI/bge-small-en-v1.5"
 
+    GROQ_API_KEY: str = ""
     GEMINI_API_KEY: str = ""
 
     CHUNK_SIZE: int = 500

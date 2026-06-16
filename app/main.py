@@ -1,6 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from contextlib import asynccontextmanager
+import os
 
 from app.api import api_router
 from app.core.config import get_settings
@@ -12,19 +15,11 @@ logger = get_logger("opsmind.main")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """
-    Startup: warm up singletons so the first request isn't slow.
-    Shutdown: clean up resources.
-    """
     settings = get_settings()
     logger.info(f"Starting {settings.APP_NAME} [{settings.ENV}]")
-
-    # Pre-load vector store (and its embedding model) at startup
     get_vector_store()
     logger.info("Vector store warmed up")
-
     yield
-
     logger.info("Shutting down OpsMind AI")
 
 
@@ -33,14 +28,14 @@ def create_app() -> FastAPI:
 
     app = FastAPI(
         title=settings.APP_NAME,
-        description="RAG-powered document intelligence API",
-        version="1.0.0",
+        description="RAG-powered document intelligence agent",
+        version="2.0.0",
         lifespan=lifespan,
     )
 
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"],  # tighten this in production
+        allow_origins=["*"],
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
@@ -48,13 +43,15 @@ def create_app() -> FastAPI:
 
     app.include_router(api_router)
 
-    @app.get("/", tags=["Root"])
+    static_dir = os.path.join(os.path.dirname(__file__), "static")
+
+    if os.path.exists(static_dir):
+        app.mount("/static", StaticFiles(directory=static_dir), name="static")
+
+    @app.get("/", include_in_schema=False)
     def root():
-        return {
-            "app": settings.APP_NAME,
-            "env": settings.ENV,
-            "docs": "/docs",
-        }
+        index_path = os.path.join(static_dir, "index.html")
+        return FileResponse(index_path)
 
     return app
 
