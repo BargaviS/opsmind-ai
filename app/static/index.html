@@ -243,7 +243,7 @@ function addMessage(role, text, sources, showSugg) {
   var suggHtml = "";
   if (showSugg) {
     suggHtml = "<div class='suggestions'>" + suggestions.slice(0,4).map(function(q) {
-      return "<button class='suggestion-btn' onclick="askQ('" + q.replace(/'/g, "\'") + "')">" + q + "</button>";
+      return '<button class="suggestion-btn" onclick="askQ(this.textContent)">' + q + '</button>';
     }).join("") + "</div>";
   }
   var formatted = text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>").replace(/
