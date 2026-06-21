@@ -253,7 +253,7 @@ function addMessage(role, text, sources, showSugg) {
   msgs.scrollTop = msgs.scrollHeight;
 }
 
-function askQ(q) {
+function askQ(q) { q = q.trim();
   if (!isReady) return;
   document.getElementById("queryInput").value = q;
   sendMessage();
