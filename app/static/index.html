@@ -8,257 +8,281 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#0f1117;color:#e0e0e0;height:100vh;display:flex;flex-direction:column}
 .header{background:#1a1d27;border-bottom:1px solid #2a2d3a;padding:16px 24px;display:flex;align-items:center;gap:12px}
-.logo{width:36px;height:36px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;color:white}
-.header h1{font-size:18px;font-weight:600;color:#fff}
-.header p{font-size:12px;color:#6b7280}
+.logo{width:40px;height:40px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;color:white}
+.header-text h1{font-size:18px;font-weight:700;color:#fff}
+.header-text p{font-size:12px;color:#6b7280;margin-top:2px}
+.badge{margin-left:auto;background:#1e2035;border:1px solid #374151;border-radius:6px;padding:4px 10px;font-size:11px;color:#6366f1;font-weight:500}
 .main{display:flex;flex:1;overflow:hidden}
-.sidebar{width:280px;background:#1a1d27;border-right:1px solid #2a2d3a;display:flex;flex-direction:column;padding:20px;gap:16px}
-.sidebar h2{font-size:13px;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:.05em}
-.upload-area{border:2px dashed #374151;border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all .2s}
-.upload-area:hover{border-color:#6366f1;background:#1e2035}
+.sidebar{width:290px;background:#1a1d27;border-right:1px solid #2a2d3a;display:flex;flex-direction:column;padding:20px;gap:14px}
+.sidebar-title{font-size:11px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:.08em}
+.upload-area{border:2px dashed #2a2d3a;border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:all .2s;background:#0f1117}
+.upload-area:hover{border-color:#6366f1;background:#13152a}
 .upload-area input{display:none}
-.upload-area .icon{font-size:28px;margin-bottom:8px}
-.upload-area p{font-size:13px;color:#6b7280}
-.upload-area span{font-size:12px;color:#6366f1}
-.upload-btn{background:#6366f1;color:white;border:none;border-radius:8px;padding:10px 16px;font-size:14px;font-weight:500;cursor:pointer;width:100%;transition:background .2s}
-.upload-btn:hover{background:#5558e3}
-.upload-btn:disabled{background:#374151;cursor:not-allowed}
+.upload-area .icon{font-size:32px;margin-bottom:8px}
+.upload-area p{font-size:13px;color:#6b7280;margin-bottom:4px}
+.upload-area span{font-size:11px;color:#4b5563}
+.upload-btn{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:white;border:none;border-radius:8px;padding:11px 16px;font-size:14px;font-weight:600;cursor:pointer;width:100%;transition:opacity .2s}
+.upload-btn:hover{opacity:.9}
+.upload-btn:disabled{background:#1f2937;color:#4b5563;cursor:not-allowed;opacity:1}
+.status{font-size:12px;padding:8px 12px;border-radius:8px;margin-top:4px}
+.status.success{background:#052e16;color:#4ade80;border:1px solid #14532d}
+.status.error{background:#2d0a0a;color:#f87171;border:1px solid #7f1d1d}
+.status.loading{background:#1e1b4b;color:#a5b4fc;border:1px solid #312e81}
 .doc-list{flex:1;overflow-y:auto}
-.doc-item{background:#0f1117;border:1px solid #2a2d3a;border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:13px}
-.doc-item .name{color:#e0e0e0;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.doc-item .meta{color:#6b7280;font-size:11px;margin-top:2px}
-.doc-item .chunks{color:#6366f1;font-size:11px}
-.status{font-size:12px;padding:8px 12px;border-radius:6px;margin-top:4px}
-.status.success{background:#052e16;color:#4ade80}
-.status.error{background:#2d0a0a;color:#f87171}
-.status.loading{background:#1e1b4b;color:#a5b4fc}
-.chat-area{flex:1;display:flex;flex-direction:column}
-.messages{flex:1;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:16px}
-.message{display:flex;gap:12px;max-width:80%}
+.doc-item{background:#0f1117;border:1px solid #2a2d3a;border-radius:8px;padding:10px 12px;margin-bottom:8px}
+.doc-name{font-size:13px;color:#e0e0e0;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.doc-meta{font-size:11px;color:#6b7280;margin-top:3px}
+.doc-chunks{color:#6366f1}
+.divider{height:1px;background:#2a2d3a}
+.chat-area{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.top-bar{padding:12px 20px;border-bottom:1px solid #2a2d3a;display:flex;justify-content:space-between;align-items:center;background:#1a1d27}
+.top-bar-left{font-size:12px;color:#6b7280}
+.top-bar-left.ready{color:#4ade80}
+.clear-btn{background:transparent;border:1px solid #2a2d3a;border-radius:6px;padding:5px 12px;color:#6b7280;font-size:12px;cursor:pointer}
+.clear-btn:hover{border-color:#6b7280;color:#e0e0e0}
+.messages{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:14px}
+.message{display:flex;gap:10px;max-width:85%}
 .message.user{align-self:flex-end;flex-direction:row-reverse}
 .message.assistant{align-self:flex-start}
-.avatar{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.avatar{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;margin-top:2px}
 .message.user .avatar{background:#374151}
 .message.assistant .avatar{background:linear-gradient(135deg,#6366f1,#8b5cf6)}
-.bubble{padding:12px 16px;border-radius:12px;font-size:14px;line-height:1.6}
+.bubble{padding:12px 16px;border-radius:12px;font-size:14px;line-height:1.7}
 .message.user .bubble{background:#6366f1;color:white;border-radius:12px 4px 12px 12px}
 .message.assistant .bubble{background:#1a1d27;border:1px solid #2a2d3a;color:#e0e0e0;border-radius:4px 12px 12px 12px}
-.source-tag{display:inline-block;background:#0f1117;border:1px solid #374151;border-radius:4px;padding:2px 8px;font-size:11px;color:#9ca3af;margin:2px}
-.score{color:#6366f1}
-.typing{display:flex;gap:4px;padding:12px 16px}
-.typing span{width:8px;height:8px;background:#6366f1;border-radius:50%;animation:bounce 1.2s infinite}
+.sources{margin-top:10px;display:flex;flex-wrap:wrap;gap:4px}
+.source-tag{background:#0f1117;border:1px solid #374151;border-radius:4px;padding:3px 8px;font-size:11px;color:#9ca3af}
+.source-score{color:#6366f1;font-weight:600}
+.suggestions{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.suggestion-btn{background:#0f1117;border:1px solid #374151;border-radius:8px;padding:6px 12px;font-size:12px;color:#9ca3af;cursor:pointer;transition:all .2s}
+.suggestion-btn:hover{border-color:#6366f1;color:#a5b4fc}
+.typing{display:flex;gap:4px;padding:4px 0}
+.typing span{width:7px;height:7px;background:#6366f1;border-radius:50%;animation:bounce 1.2s infinite}
 .typing span:nth-child(2){animation-delay:.2s}
 .typing span:nth-child(3){animation-delay:.4s}
-@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-8px)}}
-.input-area{padding:16px 24px;border-top:1px solid #2a2d3a;background:#1a1d27}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-7px)}}
+.input-area{padding:14px 20px;border-top:1px solid #2a2d3a;background:#1a1d27}
 .input-row{display:flex;gap:8px}
-.input-row input{flex:1;background:#0f1117;border:1px solid #374151;border-radius:10px;padding:12px 16px;color:#e0e0e0;font-size:14px;outline:none;transition:border .2s}
+.input-row input{flex:1;background:#0f1117;border:1px solid #2a2d3a;border-radius:10px;padding:12px 16px;color:#e0e0e0;font-size:14px;outline:none;transition:border .2s}
 .input-row input:focus{border-color:#6366f1}
 .input-row input::placeholder{color:#4b5563}
-.send-btn{background:#6366f1;border:none;border-radius:10px;padding:12px 20px;color:white;font-size:14px;font-weight:500;cursor:pointer;transition:background .2s}
-.send-btn:hover{background:#5558e3}
-.send-btn:disabled{background:#374151;cursor:not-allowed}
-.clear-btn{background:transparent;border:1px solid #374151;border-radius:8px;padding:6px 12px;color:#6b7280;font-size:12px;cursor:pointer;transition:all .2s}
-.clear-btn:hover{border-color:#6b7280;color:#e0e0e0}
-.top-bar{padding:12px 24px;border-bottom:1px solid #2a2d3a;display:flex;justify-content:space-between;align-items:center}
-.top-bar span{font-size:12px;color:#6b7280}
+.input-row input:disabled{opacity:.5;cursor:not-allowed}
+.send-btn{background:linear-gradient(135deg,#6366f1,#8b5cf6);border:none;border-radius:10px;padding:12px 20px;color:white;font-size:14px;font-weight:600;cursor:pointer}
+.send-btn:disabled{background:#1f2937;color:#4b5563;cursor:not-allowed}
 </style>
 </head>
 <body>
-
 <div class="header">
-  <div class="logo">O</div>
-  <div>
+  <div class="logo">HR</div>
+  <div class="header-text">
     <h1>HR Policy Bot</h1>
-    <p>Upload HR documents — get instant AI-powered answers</p>
+    <p>Upload HR documents and get instant AI-powered answers</p>
   </div>
+  <div class="badge">Powered by Groq LLaMA 3.3 70B</div>
 </div>
-
 <div class="main">
   <div class="sidebar">
-    <h2>Upload Document</h2>
-    <div class="upload-area" onclick="document.getElementById('fileInput').click()">
-      <input type="file" id="fileInput" accept=".txt,.pdf" onchange="handleFileSelect(event)">
-      <div class="icon">📄</div>
-      <p>Click to browse files</p>
+    <div class="sidebar-title">Upload Policy Document</div>
+    <div class="upload-area" id="uploadArea">
+      <input type="file" id="fileInput" accept=".txt,.pdf">
+      <div class="icon">📋</div>
+      <p>Click to upload HR policy</p>
       <span>PDF and TXT supported</span>
     </div>
-    <button class="upload-btn" id="uploadBtn" onclick="uploadFile()" disabled>Upload Document</button>
+    <button class="upload-btn" id="uploadBtn" disabled>Upload and Index Document</button>
     <div id="uploadStatus"></div>
-    <h2>Indexed Files</h2>
+    <div class="divider"></div>
+    <div class="sidebar-title">Indexed Documents</div>
     <div class="doc-list" id="docList">
-      <p style="font-size:12px;color:#4b5563">No documents yet</p>
+      <p style="font-size:12px;color:#4b5563;text-align:center;padding:12px 0">No documents yet</p>
     </div>
   </div>
-
   <div class="chat-area">
     <div class="top-bar">
-      <span id="docCount">Upload a document to get started</span>
-      <button class="clear-btn" onclick="clearChat()">Clear chat</button>
+      <span class="top-bar-left" id="statusBar">Upload a document to start chatting</span>
+      <button class="clear-btn" id="clearBtn">Clear chat</button>
     </div>
     <div class="messages" id="messages"></div>
     <div class="input-area">
       <div class="input-row">
-        <input type="text" id="queryInput"
-          placeholder="Ask anything about your documents..."
-          onkeydown="if(event.key==='Enter')sendMessage()">
-        <button class="send-btn" id="sendBtn" onclick="sendMessage()">Send</button>
+        <input type="text" id="queryInput" disabled placeholder="Upload a document first...">
+        <button class="send-btn" id="sendBtn" disabled>Send</button>
       </div>
     </div>
   </div>
 </div>
-
 <script>
-let selectedFile = null;
-let chatHistory = [];
-let documents = [];
+var selectedFile = null;
+var chatHistory = [];
+var documents = [];
+var isReady = false;
 
-function handleFileSelect(e) {
+var suggestions = [
+  "What is the annual leave policy?",
+  "How many sick leaves do employees get?",
+  "What is the notice period for resignation?",
+  "When is salary credited every month?",
+  "What is the remote work policy?",
+  "How is the performance bonus calculated?"
+];
+
+document.getElementById("uploadArea").addEventListener("click", function() {
+  document.getElementById("fileInput").click();
+});
+
+document.getElementById("fileInput").addEventListener("change", function(e) {
   selectedFile = e.target.files[0];
   if (selectedFile) {
-    document.getElementById('uploadBtn').disabled = false;
-    showStatus('Selected: ' + selectedFile.name, 'loading');
+    document.getElementById("uploadBtn").disabled = false;
+    showStatus("Selected: " + selectedFile.name, "loading");
   }
-}
+});
+
+document.getElementById("uploadBtn").addEventListener("click", uploadFile);
+document.getElementById("sendBtn").addEventListener("click", sendMessage);
+document.getElementById("clearBtn").addEventListener("click", clearChat);
+document.getElementById("queryInput").addEventListener("keydown", function(e) {
+  if (e.key === "Enter" && !this.disabled) sendMessage();
+});
 
 async function uploadFile() {
   if (!selectedFile) return;
-  const btn = document.getElementById('uploadBtn');
+  var btn = document.getElementById("uploadBtn");
   btn.disabled = true;
-  btn.textContent = 'Uploading...';
-  showStatus('Uploading and indexing...', 'loading');
-
-  const fd = new FormData();
-  fd.append('file', selectedFile);
-
+  btn.textContent = "Uploading...";
+  showStatus("Uploading and indexing...", "loading");
+  var fd = new FormData();
+  fd.append("file", selectedFile);
   try {
-    const res = await fetch('/upload', { method: 'POST', body: fd });
-    const data = await res.json();
+    var res = await fetch("/upload", { method: "POST", body: fd });
+    var data = await res.json();
     if (res.ok) {
       documents.push(data);
       renderDocList();
-      showStatus('✓ Indexed ' + data.chunks_stored + ' chunks', 'success');
-      addMessage('assistant', 'I have indexed <strong>' + data.filename + '</strong> (' + data.chunks_stored + ' chunks). Ask me anything about it!');
-      document.getElementById('docCount').textContent = documents.length + ' document(s) indexed';
+      showStatus("Indexed " + data.chunks_stored + " chunks successfully", "success");
+      document.getElementById("queryInput").disabled = false;
+      document.getElementById("sendBtn").disabled = false;
+      document.getElementById("queryInput").placeholder = "Ask anything about your HR policy...";
+      document.getElementById("statusBar").textContent = documents.length + " document(s) ready";
+      document.getElementById("statusBar").className = "top-bar-left ready";
+      isReady = true;
+      addMessage("assistant", "I have indexed " + data.filename + " (" + data.chunks_stored + " chunks). Ask me anything about this HR policy!", null, true);
     } else {
-      showStatus('Error: ' + data.detail, 'error');
+      showStatus("Error: " + (data.detail || "Upload failed"), "error");
+      btn.disabled = false;
     }
   } catch(e) {
-    showStatus('Upload failed. Is the server running?', 'error');
+    showStatus("Upload failed. Please try again.", "error");
+    btn.disabled = false;
   }
-
-  btn.textContent = 'Upload Document';
+  btn.textContent = "Upload and Index Document";
   selectedFile = null;
-  document.getElementById('fileInput').value = '';
+  document.getElementById("fileInput").value = "";
 }
 
 function renderDocList() {
-  const l = document.getElementById('docList');
+  var l = document.getElementById("docList");
   if (documents.length === 0) {
-    l.innerHTML = '<p style="font-size:12px;color:#4b5563">No documents yet</p>';
+    l.innerHTML = "<p style='font-size:12px;color:#4b5563;text-align:center;padding:12px 0'>No documents yet</p>";
     return;
   }
-  l.innerHTML = documents.map(d =>
-    '<div class="doc-item">' +
-    '<div class="name">📄 ' + d.filename + '</div>' +
-    '<div class="meta">' + d.file_type.toUpperCase() + ' · <span class="chunks">' + d.chunks_stored + ' chunks</span></div>' +
-    '</div>'
-  ).join('');
+  l.innerHTML = documents.map(function(d) {
+    return "<div class='doc-item'><div class='doc-name'>📋 " + d.filename + "</div><div class='doc-meta'>" + d.file_type.toUpperCase() + " · <span class='doc-chunks'>" + d.chunks_stored + " chunks</span></div></div>";
+  }).join("");
 }
 
 function showStatus(msg, type) {
-  document.getElementById('uploadStatus').innerHTML =
-    '<div class="status ' + type + '">' + msg + '</div>';
+  document.getElementById("uploadStatus").innerHTML = "<div class='status " + type + "'>" + msg + "</div>";
 }
 
 async function sendMessage() {
-  const input = document.getElementById('queryInput');
-  const query = input.value.trim();
-  if (!query) return;
-
-  input.value = '';
-  addMessage('user', query);
-  const tid = addTyping();
-  document.getElementById('sendBtn').disabled = true;
-
+  var input = document.getElementById("queryInput");
+  var query = input.value.trim();
+  if (!query || input.disabled) return;
+  input.value = "";
+  addMessage("user", query);
+  var tid = addTyping();
+  document.getElementById("sendBtn").disabled = true;
+  input.disabled = true;
   try {
-    const res = await fetch('/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    var res = await fetch("/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ query: query, history: chatHistory, top_k: 5 })
     });
-    const data = await res.json();
+    var data = await res.json();
     removeTyping(tid);
     if (res.ok) {
       chatHistory = data.history;
-      addMessage('assistant', data.answer, data.sources);
+      addMessage("assistant", data.answer, data.sources);
     } else {
-      addMessage('assistant', 'Error: ' + data.detail);
+      addMessage("assistant", "Something went wrong: " + (data.detail || "Please try again."));
     }
   } catch(e) {
     removeTyping(tid);
-    addMessage('assistant', 'Connection error. Please make sure the server is running.');
+    addMessage("assistant", "Connection error. Please wait 30 seconds and try again.");
   }
-
-  document.getElementById('sendBtn').disabled = false;
+  document.getElementById("sendBtn").disabled = false;
+  input.disabled = false;
   input.focus();
 }
 
-function addMessage(role, text, sources) {
-  const msgs = document.getElementById('messages');
-  const div = document.createElement('div');
-  div.className = 'message ' + role;
-
-  const avatar = role === 'user' ? '👤' : '🤖';
-
-  let srcHtml = '';
+function addMessage(role, text, sources, showSugg) {
+  var msgs = document.getElementById("messages");
+  var div = document.createElement("div");
+  div.className = "message " + role;
+  var avatar = role === "user" ? "👤" : "🤖";
+  var srcHtml = "";
   if (sources && sources.length > 0) {
-    srcHtml = '<div style="margin-top:8px">' +
-      sources.slice(0, 3).map(s =>
-        '<span class="source-tag">📄 ' + s.document_id.substring(0,8) + '... ' +
-        '<span class="score">' + Math.round((s.score || 0) * 100) + '%</span></span>'
-      ).join('') + '</div>';
+    srcHtml = "<div class='sources'>" + sources.slice(0,3).map(function(s) {
+      var name = (s.filename || s.document_id || "").replace(/\.[^/.]+$/, "").substring(0,20);
+      var score = Math.round((s.rerank_score || s.score || 0) * 100);
+      return "<span class='source-tag'>📄 " + name + " <span class='source-score'>" + score + "%</span></span>";
+    }).join("") + "</div>";
   }
-
-  const formatted = text
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\n/g, '<br>');
-
-  div.innerHTML =
-    '<div class="avatar">' + avatar + '</div>' +
-    '<div><div class="bubble">' + formatted + srcHtml + '</div></div>';
-
+  var suggHtml = "";
+  if (showSugg) {
+    suggHtml = "<div class='suggestions'>" + suggestions.slice(0,4).map(function(q) {
+      return "<button class='suggestion-btn' onclick="askQ('" + q.replace(/'/g, "\'") + "')">" + q + "</button>";
+    }).join("") + "</div>";
+  }
+  var formatted = text.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>").replace(/
+/g, "<br>");
+  div.innerHTML = "<div class='avatar'>" + avatar + "</div><div><div class='bubble'>" + formatted + srcHtml + suggHtml + "</div></div>";
   msgs.appendChild(div);
   msgs.scrollTop = msgs.scrollHeight;
 }
 
+function askQ(q) {
+  if (!isReady) return;
+  document.getElementById("queryInput").value = q;
+  sendMessage();
+}
+
 function addTyping() {
-  const msgs = document.getElementById('messages');
-  const id = 't' + Date.now();
-  const div = document.createElement('div');
-  div.className = 'message assistant';
+  var msgs = document.getElementById("messages");
+  var id = "t" + Date.now();
+  var div = document.createElement("div");
+  div.className = "message assistant";
   div.id = id;
-  div.innerHTML = '<div class="avatar">🤖</div><div class="bubble typing"><span></span><span></span><span></span></div>';
+  div.innerHTML = "<div class='avatar'>🤖</div><div class='bubble'><div class='typing'><span></span><span></span><span></span></div></div>";
   msgs.appendChild(div);
   msgs.scrollTop = msgs.scrollHeight;
   return id;
 }
 
 function removeTyping(id) {
-  const el = document.getElementById(id);
+  var el = document.getElementById(id);
   if (el) el.remove();
 }
 
 function clearChat() {
   chatHistory = [];
-  document.getElementById('messages').innerHTML = '';
-  addMessage('assistant', 'Chat cleared! Ask me anything about your uploaded documents.');
+  document.getElementById("messages").innerHTML = "";
+  addMessage("assistant", "Chat cleared! Ask me anything about your uploaded HR policy documents.");
 }
 
-// Welcome message
-addMessage('assistant', 'Hello! I am HR Policy Bot 👋
-
-Upload your HR policy document on the left and ask me anything about leave rules, benefits, notice period, work hours, and more.');
+addMessage("assistant", "Hello! I am HR Policy Bot.\n\nUpload your HR policy document on the left and ask me anything about leave rules, benefits, notice period, work hours, and more.\n\nI use a 2-stage retrieval pipeline with CrossEncoder reranking to find the most accurate answers from your documents.");
 </script>
 </body>
 </html>
