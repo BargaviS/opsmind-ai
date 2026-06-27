@@ -1,3 +1,12 @@
+---
+title: HR Policy Bot
+emoji: 🤖
+colorFrom: indigo
+colorTo: purple
+sdk: docker
+pinned: false
+---
+
 # 🤖 HR Policy Bot
 
 > **AI-powered HR document assistant** — Upload your HR policies, employee handbooks, or company guidelines and ask questions in plain English. Get accurate, grounded answers instantly.
