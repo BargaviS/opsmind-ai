@@ -1,0 +1,16 @@
+# Light dependencies for tests/CI. No torch/sentence-transformers needed,
+# because the tests use fake models.
+fastapi==0.110.0
+uvicorn==0.27.1
+pydantic==2.10.0
+pydantic-settings==2.6.0
+python-dotenv==1.0.1
+python-multipart==0.0.9
+chromadb==0.5.23
+numpy==1.26.4
+langchain-text-splitters==0.2.0
+pypdf==4.1.0
+groq==0.11.0
+httpx==0.27.0
+pytest==8.3.3
+ruff==0.6.9

@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HR Policy Bot</title>
+<style>
+  :root{--ink:#14213d;--muted:#5b6678;--line:#d9dee7;--bg:#f4f6f9;--card:#fff;--accent:#0f766e;--warn:#9a5b00;--warnbg:#fff4de}
+  @media (prefers-color-scheme:dark){:root{--ink:#e8ecf3;--muted:#9aa5b8;--line:#2b3547;--bg:#0f1521;--card:#171f2e;--accent:#2dd4bf;--warn:#f5c26b;--warnbg:#2c2414}}
+  *{box-sizing:border-box}
+  body{margin:0;font:16px/1.5 "Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+  .wrap{max-width:760px;margin:0 auto;padding:20px 16px;display:flex;flex-direction:column;height:100dvh}
+  h1{font-size:1.35rem;margin:0}
+  .sub{color:var(--muted);margin:2px 0 14px;font-size:.92rem}
+  .bar{display:flex;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+  button{font:inherit;cursor:pointer;border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:8px;padding:8px 14px}
+  button.ghost{background:transparent;color:var(--accent)}
+  button:disabled{opacity:.5;cursor:wait}
+  button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+  #status{font-size:.9rem;color:var(--muted)}
+  #log{flex:1;overflow-y:auto;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:12px}
+  .msg{max-width:88%;padding:10px 13px;border-radius:10px;white-space:pre-wrap;overflow-wrap:anywhere}
+  .user{align-self:flex-end;background:var(--accent);color:#fff}
+  .bot{align-self:flex-start;background:var(--bg);border:1px solid var(--line)}
+  .bot.abstain{background:var(--warnbg);color:var(--warn);border-color:var(--warn)}
+  .src{margin-top:8px;font-size:.82rem;color:var(--muted)}
+  .empty{color:var(--muted);text-align:center;margin:auto;max-width:34ch}
+  form{display:flex;gap:8px;margin-top:12px}
+  input[type=text]{flex:1;font:inherit;padding:10px 12px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+  @media (prefers-reduced-motion:no-preference){.msg{animation:in .15s ease-out}@keyframes in{from{opacity:0}to{opacity:1}}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>HR Policy Bot</h1>
+  <p class="sub">Upload a policy document (PDF or TXT), then ask questions. Answers come only from your document.</p>
+  <div class="bar">
+    <input id="file" type="file" accept=".pdf,.txt" hidden>
+    <button class="ghost" id="pick" type="button">Upload document</button>
+    <span id="status" role="status" aria-live="polite"></span>
+  </div>
+  <div id="log" aria-live="polite"><p class="empty" id="empty">Upload a document, then try: “How many days of annual leave do I get?”</p></div>
+  <form id="form">
+    <input id="q" type="text" placeholder="Ask about leave, notice period, salary…" maxlength="1000" aria-label="Your question" required>
+    <button id="send" type="submit">Ask</button>
+  </form>
+</div>
+<script>
+const $ = id => document.getElementById(id);
+const history = [];
+const setStatus = t => $("status").textContent = t;
+
+function add(cls, text, sources) {
+  $("empty")?.remove();
+  const d = document.createElement("div");
+  d.className = "msg " + cls;
+  d.textContent = text;               // textContent: never inject HTML from the server
+  if (sources && sources.length) {
+    const s = document.createElement("div");
+    s.className = "src";
+    s.textContent = "Sources: " + sources.map(x => `${x.filename} (chunk ${x.chunk_index}, ${(x.rerank_score*100).toFixed(0)}% match)`).join("; ");
+    d.appendChild(s);
+  }
+  $("log").appendChild(d);
+  $("log").scrollTop = $("log").scrollHeight;
+}
+
+$("pick").onclick = () => $("file").click();
+$("file").onchange = async () => {
+  const f = $("file").files[0]; if (!f) return;
+  const fd = new FormData(); fd.append("file", f);
+  setStatus("Uploading and indexing…");
+  try {
+    const r = await fetch("/upload", {method: "POST", body: fd});
+    const j = await r.json();
+    setStatus(r.ok ? j.message + (j.chunks ? ` (${j.chunks} chunks)` : "") : (j.detail || "Upload failed."));
+  } catch { setStatus("Network error. Please try again."); }
+  $("file").value = "";
+};
+
+$("form").onsubmit = async e => {
+  e.preventDefault();
+  const query = $("q").value.trim(); if (query.length < 2) return;
+  add("user", query); $("q").value = ""; $("send").disabled = true;
+  try {
+    const r = await fetch("/chat", {method: "POST", headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({query, history: history.slice(-6)})});
+    const j = await r.json();
+    if (!r.ok) { add("bot abstain", typeof j.detail === "string" ? j.detail : "Something went wrong."); }
+    else {
+      add("bot" + (j.abstained ? " abstain" : ""), j.answer, j.sources);
+      history.push({role: "user", content: query}, {role: "assistant", content: j.answer});
+    }
+  } catch { add("bot abstain", "Network error. Please try again."); }
+  $("send").disabled = false; $("q").focus();
+};
+</script>
+</body>
+</html>

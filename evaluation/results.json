@@ -1,0 +1,64 @@
+{
+  "chunks": 21,
+  "questions": 22,
+  "hit_at_n": 1.0,
+  "avg_latency_ms": 255.5,
+  "p95_latency_ms": 72.2,
+  "score_range_answerable": [
+    0.312,
+    1.0
+  ],
+  "score_range_unanswerable": [
+    0.0,
+    0.0
+  ],
+  "by_threshold": {
+    "0.05": {
+      "answerable_answered": 1.0,
+      "unanswerable_abstained": 1.0
+    },
+    "0.1": {
+      "answerable_answered": 1.0,
+      "unanswerable_abstained": 1.0
+    },
+    "0.2": {
+      "answerable_answered": 1.0,
+      "unanswerable_abstained": 1.0
+    },
+    "0.3": {
+      "answerable_answered": 1.0,
+      "unanswerable_abstained": 1.0
+    },
+    "0.5": {
+      "answerable_answered": 0.857,
+      "unanswerable_abstained": 1.0
+    }
+  },
+  "wrongly_abstained": [],
+  "vector_range_answerable": [
+    0.6,
+    0.923
+  ],
+  "vector_range_unanswerable": [
+    0.432,
+    0.671
+  ],
+  "hybrid_rerank_or_vector": {
+    "0.5": {
+      "answerable_answered": 1.0,
+      "unanswerable_abstained": 0.375
+    },
+    "0.6": {
+      "answerable_answered": 1.0,
+      "unanswerable_abstained": 0.75
+    },
+    "0.7": {
+      "answerable_answered": 1.0,
+      "unanswerable_abstained": 1.0
+    },
+    "0.8": {
+      "answerable_answered": 1.0,
+      "unanswerable_abstained": 1.0
+    }
+  }
+}
