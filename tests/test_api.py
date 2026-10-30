@@ -84,3 +84,59 @@ def test_rate_limit_blocks_abusive_client(make_client):
     client = make_client(rate_limit_per_minute=2)
     codes = [client.get("/search", params={"query": "leave days"}).status_code for _ in range(3)]
     assert codes == [200, 200, 429]
+
+
+def test_chat_returns_request_id_matching_header(client, uploaded):
+    r = client.post("/chat", json={"query": "How many days of annual leave do I get?"})
+    assert len(r.json()["request_id"]) == 12
+    assert r.headers["X-Request-ID"] == r.json()["request_id"]
+
+
+def test_rewrite_fixes_a_badly_typed_question(client, uploaded, agent):
+    agent.rewrite_to = "What is the notice period for senior staff?"
+    r = client.post("/chat", json={"query": "notis perid senor staf"})
+    body = r.json()
+    assert not body["abstained"] and body["rewritten_query"] == agent.rewrite_to
+    assert agent.rewrite_calls == 1
+
+
+def test_rewrite_failure_falls_back_to_original_question(client, uploaded, agent):
+    agent.rewrite_fail = True
+    r = client.post("/chat", json={"query": "How many days of annual leave do I get?"})
+    assert r.status_code == 200 and not r.json()["abstained"]
+    assert r.json()["rewritten_query"] is None
+
+
+def test_rewrite_can_be_switched_off(make_client, agent):
+    client = make_client(rewrite_queries=False)
+    client.post("/chat", json={"query": "hello there friend"})
+    assert agent.rewrite_calls == 0
+
+
+def test_feedback_is_saved(client, make_client):
+    from app.services.feedback_store import count_feedback
+
+    r = client.post("/feedback", json={"request_id": "abc123def456", "rating": "down", "reason": "wrong"})
+    assert r.status_code == 200 and r.json()["status"] == "saved"
+    from app.core.config import get_settings
+    from app.main import app
+
+    assert count_feedback(app.dependency_overrides[get_settings]().db_path) == 1
+
+
+def test_feedback_validation(client):
+    assert client.post("/feedback", json={"request_id": "bad id!", "rating": "up"}).status_code == 422
+    assert client.post("/feedback", json={"request_id": "abc123def456", "rating": "meh"}).status_code == 422
+    too_long = {"request_id": "abc123def456", "rating": "up", "reason": "x" * 501}
+    assert client.post("/feedback", json=too_long).status_code == 422
+
+
+def test_feedback_sql_injection_is_stored_as_plain_text(client):
+    evil = "'); DROP TABLE feedback;--"
+    r = client.post("/feedback", json={"request_id": "abc123def456", "rating": "up", "reason": evil})
+    assert r.status_code == 200
+    assert client.post("/feedback", json={"request_id": "abc123def456", "rating": "up"}).status_code == 200
+
+
+def test_ready_endpoint(client):
+    assert client.get("/ready").json() == {"ready": True}

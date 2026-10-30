@@ -19,25 +19,27 @@ class Settings(BaseSettings):
     upload_dir: str = "data/uploads"
     chroma_dir: str = "data/chroma"
     chroma_collection: str = "documents"
+    db_path: str = "data/app.db"          # SQLite file for feedback
 
     # Models
     embedding_model: str = "BAAI/bge-small-en-v1.5"
     reranker_model: str = "cross-encoder/ms-marco-MiniLM-L-6-v2"
     groq_api_key: str = ""
-    llm_model: str = "llama-3.3-70b-versatile"
+    llm_model: str = "openai/gpt-oss-120b"
     llm_timeout_seconds: float = 30.0
 
     # RAG tuning
-    chunk_size: int = Field(500, ge=100, le=4000)
-    chunk_overlap: int = Field(100, ge=0, le=1000)
+    chunk_size: int = Field(200, ge=100, le=4000)
+    chunk_overlap: int = Field(40, ge=0, le=1000)
     search_top_k: int = Field(5, ge=1, le=20)      # Stage 1 candidates
     rerank_top_n: int = Field(3, ge=1, le=10)      # Stage 2 survivors
-    min_rerank_score: float = Field(0.10, ge=0.0, le=1.0)  # abstain below this
+    min_rerank_score: float = Field(0.05, ge=0.0, le=1.0)  # abstain below this
 
     # Safety limits
     max_upload_mb: int = Field(10, ge=1, le=50)
     rate_limit_per_minute: int = Field(30, ge=1)
     max_history_turns: int = 6
+    rewrite_queries: bool = True            # clean up typos / follow-ups before searching
 
     def validate_runtime(self) -> None:
         """Called at startup. Fail fast with a clear message."""

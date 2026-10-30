@@ -61,6 +61,15 @@ class FakeAgent:
     def __init__(self):
         self.calls = 0
         self.fail = False
+        self.rewrite_calls = 0
+        self.rewrite_to = None      # what rewrite() should return (None = same as input)
+        self.rewrite_fail = False
+
+    def rewrite(self, query, history):
+        self.rewrite_calls += 1
+        if self.rewrite_fail:
+            raise RuntimeError("rewrite boom")
+        return self.rewrite_to or query
 
     def answer(self, query, context, history):
         self.calls += 1
@@ -80,7 +89,8 @@ def make_client(tmp_path, agent):
 
     def _make(**overrides) -> TestClient:
         settings = Settings(
-            env="test", upload_dir=str(tmp_path / "uploads"), min_rerank_score=0.3, **overrides
+            env="test", upload_dir=str(tmp_path / "uploads"), min_rerank_score=0.3,
+            db_path=str(tmp_path / "app.db"), **overrides
         )
         app.dependency_overrides[get_settings] = lambda: settings
         app.dependency_overrides[deps.get_store] = lambda: store

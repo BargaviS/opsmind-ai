@@ -1,4 +1,6 @@
 """Pydantic request/response models: validation + automatic API docs."""
+from typing import Literal
+
 from pydantic import BaseModel, Field
 
 
@@ -52,3 +54,15 @@ class ChatResponse(BaseModel):
     answer: str
     sources: list[Source]
     abstained: bool
+    request_id: str
+    rewritten_query: str | None = None  # what the bot understood, if it cleaned up your question
+
+
+class FeedbackRequest(BaseModel):
+    request_id: str = Field(pattern="^[a-f0-9]{12}$")
+    rating: Literal["up", "down"]
+    reason: str | None = Field(default=None, max_length=500)
+
+
+class FeedbackResponse(BaseModel):
+    status: str

@@ -1,0 +1,20 @@
+COMPANY IT AND SECURITY POLICY
+
+Accounts and Passwords:
+- Passwords must be at least 12 characters long and changed every 90 days.
+- Multi-factor authentication is mandatory for all company accounts.
+- Never share your password with anyone, including the IT team.
+
+Devices:
+- Lost or stolen laptops must be reported to IT within 24 hours.
+- Personal USB drives are not allowed on company computers.
+- Software installation requires written approval from the IT department.
+
+Data and Network:
+- Company data must be backed up daily to the cloud.
+- A VPN is required when working from public Wi-Fi.
+- Visitors must wear a badge and be escorted at all times.
+
+Support:
+- The IT helpdesk is open from 8 AM to 8 PM on weekdays.
+- Phishing emails should be forwarded to security@company.example.

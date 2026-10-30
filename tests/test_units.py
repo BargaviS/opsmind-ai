@@ -48,3 +48,24 @@ def test_build_context_has_source_labels():
         [{"filename": "hr.txt", "chunk_index": 2, "text": "18 days"}]
     )
     assert "[Source: hr.txt, chunk 2]" in ctx and "18 days" in ctx
+
+
+def test_retriever_drops_weak_chunks_below_threshold():
+    class Store:
+        def search(self, emb, k):
+            base = {"document_id": "d", "filename": "f", "vector_score": 0.9}
+            return [
+                {**base, "text": "strong", "chunk_index": 0},
+                {**base, "text": "weak", "chunk_index": 1},
+            ]
+
+    class Emb:
+        def embed_query(self, q):
+            return [0.0]
+
+    class Rer:
+        def score(self, q, texts):
+            return [0.8, 0.02]
+
+    chunks, abstained = Retriever(Store(), Emb(), Rer(), 5, 3, 0.10).retrieve("q")
+    assert not abstained and [c["text"] for c in chunks] == ["strong"]

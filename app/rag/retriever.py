@@ -38,9 +38,12 @@ class Retriever:
             cand["rerank_score"] = round(s, 4)
         ranked = sorted(candidates, key=lambda c: c["rerank_score"], reverse=True)[: self.top_n]
 
-        if ranked[0]["rerank_score"] < self.min_rerank_score:
+        # Keep only chunks that individually pass the threshold. Weak chunks are
+        # not sent to the LLM and not shown as sources.
+        relevant = [c for c in ranked if c["rerank_score"] >= self.min_rerank_score]
+        if not relevant:
             return [], True
-        return ranked, False
+        return relevant, False
 
     @staticmethod
     def build_context(chunks: list[dict]) -> str:

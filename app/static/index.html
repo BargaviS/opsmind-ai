@@ -24,6 +24,9 @@
   .bot{align-self:flex-start;background:var(--bg);border:1px solid var(--line)}
   .bot.abstain{background:var(--warnbg);color:var(--warn);border-color:var(--warn)}
   .src{margin-top:8px;font-size:.82rem;color:var(--muted)}
+  .fb{margin-top:6px;display:flex;gap:6px;align-items:center;font-size:.82rem;color:var(--muted)}
+  .fb button{padding:2px 9px;font-size:.85rem}
+  .understood{font-size:.82rem;color:var(--muted);margin-bottom:6px;font-style:italic}
   .empty{color:var(--muted);text-align:center;margin:auto;max-width:34ch}
   form{display:flex;gap:8px;margin-top:12px}
   input[type=text]{flex:1;font:inherit;padding:10px 12px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
@@ -50,16 +53,44 @@ const $ = id => document.getElementById(id);
 const history = [];
 const setStatus = t => $("status").textContent = t;
 
-function add(cls, text, sources) {
+async function sendFeedback(box, requestId, rating) {
+  box.textContent = "Sending…";
+  try {
+    const r = await fetch("/feedback", {method: "POST", headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({request_id: requestId, rating})});
+    box.textContent = r.ok ? "Thanks for your feedback." : "Could not save feedback.";
+  } catch { box.textContent = "Could not save feedback."; }
+}
+
+function add(cls, text, extra = {}) {
   $("empty")?.remove();
   const d = document.createElement("div");
   d.className = "msg " + cls;
-  d.textContent = text;               // textContent: never inject HTML from the server
-  if (sources && sources.length) {
+  if (extra.understood) {
+    const u = document.createElement("div");
+    u.className = "understood";
+    u.textContent = "Understood as: " + extra.understood;   // textContent: never inject server HTML
+    d.appendChild(u);
+  }
+  d.appendChild(document.createTextNode(text));
+  if (extra.sources && extra.sources.length) {
     const s = document.createElement("div");
     s.className = "src";
-    s.textContent = "Sources: " + sources.map(x => `${x.filename} (chunk ${x.chunk_index}, ${(x.rerank_score*100).toFixed(0)}% match)`).join("; ");
+    s.textContent = "Sources: " + extra.sources.map(x => `${x.filename} (chunk ${x.chunk_index}, ${(x.rerank_score*100).toFixed(0)}% match)`).join("; ");
     d.appendChild(s);
+  }
+  if (extra.requestId) {
+    const fb = document.createElement("div");
+    fb.className = "fb";
+    fb.append("Was this helpful?");
+    for (const [label, rating] of [["👍", "up"], ["👎", "down"]]) {
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "ghost"; b.textContent = label;
+      b.setAttribute("aria-label", rating === "up" ? "Helpful" : "Not helpful");
+      b.onclick = () => sendFeedback(fb, extra.requestId, rating);
+      fb.appendChild(b);
+    }
+    d.appendChild(fb);
   }
   $("log").appendChild(d);
   $("log").scrollTop = $("log").scrollHeight;
@@ -88,7 +119,8 @@ $("form").onsubmit = async e => {
     const j = await r.json();
     if (!r.ok) { add("bot abstain", typeof j.detail === "string" ? j.detail : "Something went wrong."); }
     else {
-      add("bot" + (j.abstained ? " abstain" : ""), j.answer, j.sources);
+      add("bot" + (j.abstained ? " abstain" : ""), j.answer,
+          {sources: j.sources, requestId: j.request_id, understood: j.rewritten_query});
       history.push({role: "user", content: query}, {role: "assistant", content: j.answer});
     }
   } catch { add("bot abstain", "Network error. Please try again."); }

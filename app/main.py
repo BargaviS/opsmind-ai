@@ -1,4 +1,5 @@
 """FastAPI entry point: validates config at startup, wires routes, serves the UI."""
+import uuid
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -6,7 +7,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
-from app.api.routes import chat, health, search, upload
+from app.api.routes import chat, feedback, health, search, upload
 from app.core.config import get_settings
 from app.core.logger import get_logger
 
@@ -24,10 +25,19 @@ async def lifespan(app: FastAPI):
     yield
 
 
-app = FastAPI(title="OpsMind AI — HR Policy Bot", version="2.0.0", lifespan=lifespan)
+app = FastAPI(title="OpsMind AI — HR Policy Bot", version="2.1.0", lifespan=lifespan)
 
-for r in (health.router, upload.router, search.router, chat.router):
+for r in (health.router, upload.router, search.router, chat.router, feedback.router):
     app.include_router(r)
+
+
+@app.middleware("http")
+async def add_request_id(request: Request, call_next):
+    """Every request gets a short ID, returned in the X-Request-ID header and used in logs."""
+    request.state.request_id = uuid.uuid4().hex[:12]
+    response = await call_next(request)
+    response.headers["X-Request-ID"] = request.state.request_id
+    return response
 
 
 @app.exception_handler(Exception)
