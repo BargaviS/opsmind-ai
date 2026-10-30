@@ -11,7 +11,7 @@
 | B. Vector + reranking | MRR | 0.986 |
 | C. B + threshold | In-scope questions answered with the right chunk | 69% |
 | C. B + threshold | Out-of-scope / injection questions refused | 100% |
-| Latency (embed + search + rerank, CPU) | average / p95 | 44.1 ms / 47.4 ms |
+| Latency (embed + search + rerank, CPU) | average / p95 | 49.0 ms / 53.8 ms |
 
 ### By question type (default configuration)
 

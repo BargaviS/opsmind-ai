@@ -30,8 +30,8 @@
       "handled_correctly": 0.091
     }
   },
-  "latency_ms_avg": 44.1,
-  "latency_ms_p95": 47.4,
+  "latency_ms_avg": 49.0,
+  "latency_ms_p95": 53.8,
   "grid": [
     {
       "chunk_size": 120,
