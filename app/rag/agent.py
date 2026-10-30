@@ -36,7 +36,6 @@ class Agent:
             model=self._model,
             messages=build_messages(query, context, history, self._max_turns),
             temperature=0.1,
-            max_tokens=1500,
-            extra_body={"reasoning_effort": "low"},
+            max_tokens=400,
         )
         return (resp.choices[0].message.content or "").strip() or ABSTAIN_MESSAGE

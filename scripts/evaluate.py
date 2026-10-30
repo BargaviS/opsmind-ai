@@ -47,8 +47,7 @@ def main(doc_path: str) -> None:
             latencies.append((time.perf_counter() - t0) * 1000)
             best = ranked[0]["rerank_score"] if ranked else 0.0
             hit = any(item["expect"].lower() in c["text"].lower() for c in ranked)
-            best_vec = max((c["vector_score"] for c in ranked), default=0.0)
-            rows.append({**item, "best_score": best, "best_vec": best_vec, "hit": hit})
+            rows.append({**item, "best_score": best, "hit": hit})
 
     ans = [r for r in rows if r["answerable"]]
     unans = [r for r in rows if not r["answerable"]]
@@ -70,18 +69,6 @@ def main(doc_path: str) -> None:
             for t in THRESHOLDS
         },
     }
-    report["wrongly_abstained"] = [r["q"] for r in ans if r["best_score"] < 0.05]
-    report["vector_range_answerable"] = [
-        round(min(r["best_vec"] for r in ans), 3), round(max(r["best_vec"] for r in ans), 3)]
-    report["vector_range_unanswerable"] = [
-        round(min(r["best_vec"] for r in unans), 3), round(max(r["best_vec"] for r in unans), 3)]
-    report["hybrid_rerank_or_vector"] = {}
-    for v in (0.5, 0.6, 0.7, 0.8):
-        ok = lambda r: r["best_score"] >= 0.05 or r["best_vec"] >= v  # noqa: E731
-        report["hybrid_rerank_or_vector"][str(v)] = {
-            "answerable_answered": round(sum(ok(r) for r in ans) / len(ans), 3),
-            "unanswerable_abstained": round(sum(not ok(r) for r in unans) / len(unans), 3),
-        }
     Path("evaluation").mkdir(exist_ok=True)
     Path("evaluation/results.json").write_text(json.dumps(report, indent=2))
     print(json.dumps(report, indent=2))

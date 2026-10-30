@@ -24,7 +24,7 @@ class Settings(BaseSettings):
     embedding_model: str = "BAAI/bge-small-en-v1.5"
     reranker_model: str = "cross-encoder/ms-marco-MiniLM-L-6-v2"
     groq_api_key: str = ""
-    llm_model: str = "openai/gpt-oss-120b"
+    llm_model: str = "llama-3.3-70b-versatile"
     llm_timeout_seconds: float = 30.0
 
     # RAG tuning
